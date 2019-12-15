@@ -1,4 +1,6 @@
 from datetime import datetime
+from openpyxl import Workbook
+from openpyxl.styles import Font
 
 
 def start_work():
@@ -8,36 +10,26 @@ def start_work():
 
     end_time = datetime.now()
     work_duration = end_time - start_time
-    raw_seconds = work_duration.seconds
-    hours = raw_seconds//3600
-    minutes = (raw_seconds//60) % 60
+    hours = round(work_duration.seconds/3600, 2)
+    print('Hours: ' + str(hours))
+    task = input('Enter task info... ')
+    print("Task: " + task)
 
-    if hours == 0 and minutes == 0:
-        formatted_length = None
-    elif hours == 0:
-        if minutes == 1:
-            formatted_length = str(minutes) + ' minute'
-        else:
-            formatted_length = str(minutes) + ' minutes'
-    elif minutes == 0:
-        if hours == 1:
-            formatted_length = str(hours) + ' hour'
-        else:
-            formatted_length = str(hours) + ' hours'
-    else:
-        if hours == 1 and minutes == 1:
-            formatted_length = str(hours) + ' hour ' + str(minutes) + ' minute'
-        elif hours == 1:
-            formatted_length = str(hours) + ' hour ' + str(minutes) + ' minutes'
-        elif minutes == 1:
-            formatted_length = str(hours) + ' hours ' + str(minutes) + ' minute'
-        else:
-            formatted_length = str(hours) + ' hours ' + str(minutes) + ' minutes'
-
-    if formatted_length is not None:
-        print('Length of work: ' + formatted_length)
-    else:
-        print('Length of work less than 1 minute...')
+    workbook = Workbook()
+    sheet = workbook.active
+    bold_font = Font(bold=True)
+    sheet["A1"] = "Date"
+    sheet["B1"] = "Hours"
+    sheet["C1"] = "Task"
+    sheet["A1"].font = bold_font
+    sheet["B1"].font = bold_font
+    sheet["C1"].font = bold_font
+    sheet["A2"] = datetime.now().strftime("%x")
+    sheet["B2"] = str(hours)
+    sheet["C2"] = task
+    file_name = "test.xlsx"
+    workbook.save(filename=file_name)
+    print("Saved work session to file: " + file_name)
 
 
 if __name__ == "__main__":
