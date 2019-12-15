@@ -16,9 +16,10 @@ def start_work():
         file_name = "timesheet.xlsx"
 
     # start work timing
-    print('Starting work...')
+    print('Starting work at ' + datetime.now().strftime("%#I:%M %p") + '...')
     start_time = datetime.now()
     input('Press enter to end work... ')
+    print('Work done at ' + datetime.now().strftime("%#I:%M %p"))
 
     # end work timing and calculate hours
     end_time = datetime.now()
