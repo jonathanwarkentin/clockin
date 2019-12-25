@@ -18,11 +18,13 @@ def start_work():
     # start work timing
     print('Starting work at ' + datetime.now().strftime("%#I:%M %p") + '...')
     start_time = datetime.now()
+    start_string = start_time.strftime("%#I:%M %p")
     input('Press enter to end work... ')
     print('Work done at ' + datetime.now().strftime("%#I:%M %p"))
 
     # end work timing and calculate hours
     end_time = datetime.now()
+    end_string = end_time.strftime("%#I:%M %p")
     work_duration = end_time - start_time
     hours = round(work_duration.seconds/3600, 2)
     print('Hours: ' + str(hours))
@@ -41,12 +43,16 @@ def start_work():
         # if last entry from same day, append new info to that
         if last_date.value == todays_date:
             sheet['B' + str(row_number)] = str(float(sheet['B' + str(row_number)].value) + hours)
-            sheet['C' + str(row_number)] = sheet['C' + str(row_number)].value + '; ' + task
+            sheet['C' + str(row_number)] = sheet['C' + str(row_number)].value + '; ' + start_string
+            sheet['D' + str(row_number)] = sheet['D' + str(row_number)].value + '; ' + end_string
+            sheet['E' + str(row_number)] = sheet['E' + str(row_number)].value + '; ' + task
         # else add new row with current date
         else:
             sheet["A" + str(row_number + 1)] = datetime.now().strftime("%x")
             sheet["B" + str(row_number + 1)] = str(hours)
-            sheet["C" + str(row_number + 1)] = task
+            sheet["C" + str(row_number + 1)] = start_string
+            sheet["D" + str(row_number + 1)] = end_string
+            sheet["E" + str(row_number + 1)] = task
         workbook.save(filename=file_name)
         print("Saved work session to existing file: " + file_name)
 
@@ -57,13 +63,19 @@ def start_work():
         bold_font = Font(bold=True)
         sheet["A1"] = "Date"
         sheet["B1"] = "Hours"
-        sheet["C1"] = "Task"
+        sheet["C1"] = "In"
+        sheet["D1"] = "Out"
+        sheet["E1"] = "Task"
         sheet["A1"].font = bold_font
         sheet["B1"].font = bold_font
         sheet["C1"].font = bold_font
+        sheet["D1"].font = bold_font
+        sheet["E1"].font = bold_font
         sheet["A2"] = datetime.now().strftime("%x")
         sheet["B2"] = str(hours)
-        sheet["C2"] = task
+        sheet["C2"] = start_string
+        sheet["D2"] = end_string
+        sheet["E2"] = task
         workbook.save(filename=file_name)
         print("Saved work session to new file: " + file_name)
 
